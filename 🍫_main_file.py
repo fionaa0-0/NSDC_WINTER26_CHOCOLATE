@@ -28,3 +28,7 @@ data.to_csv("cleaned_dataset_flavors_of_cacao.csv", index=False)
 data2 = pd.read_csv("Chocolate Sales.csv")
 data.head()
 data.info()
+
+#check if we have all values 
+data.isna().sum()
+
