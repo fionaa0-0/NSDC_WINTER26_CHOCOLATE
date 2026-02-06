@@ -3,6 +3,9 @@
 #kavya
 
 import pandas as pd
+import numpy as np 
+from sklearn.linear_model import LinearRegression
+import matplotlib.pyplot as plt
 
 #read in data + get its info
 data = pd.read_csv("flavors_of_cacao.csv")
@@ -32,3 +35,32 @@ data.info()
 #check if we have all values 
 data.isna().sum()
 
+
+# Fiona visualization!
+# trying a simple linear regression model to check if the rating is based on the cocoa percent
+cleaned_flavors = pd.read_csv("cleaned_dataset_flavors_of_cacao.csv")
+
+cleaned_flavors['Cocoa\nPercent'] = (
+    cleaned_flavors['Cocoa\nPercent']
+    .str.replace('%', '', regex=False)
+    .astype(float)
+)
+
+X = cleaned_flavors[['Cocoa\nPercent']]
+y = cleaned_flavors['Rating']
+
+model = LinearRegression()
+model.fit(X, y)
+
+# Sort values so the line is not jagged
+X_sorted = np.sort(X.values, axis=0)
+y_pred = model.predict(X_sorted)
+
+plt.figure()
+plt.scatter(X, y)
+plt.plot(X_sorted, y_pred)
+plt.xlabel("Cocoa Percent")
+plt.ylabel("Rating")
+plt.title("Linear Regression: Rating vs Cocoa Percent")
+plt.show()
+#shows that people tend to like lower cocoa percentages!
